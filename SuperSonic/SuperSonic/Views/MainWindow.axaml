@@ -1,0 +1,267 @@
+﻿<Window
+    x:Class="SuperSonic.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+    xmlns:materialControls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+    xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:viewModels="using:SuperSonic.ViewModels"
+    x:Name="Root"
+    Title="SuperSonic"
+    Width="700"
+    Height="450"
+    Icon="/favicon.ico"
+    Loaded="Root_OnLoaded"
+    WindowStartupLocation="CenterScreen">
+	<Window.DataContext>
+		<viewModels:MainViewModel />
+	</Window.DataContext>
+	<DockPanel>
+		<!--  Header  -->
+		<StackPanel
+            Background="#141414"
+            DockPanel.Dock="Top"
+            Orientation="Vertical">
+			<!--  Query  -->
+			<materialControls:Card Margin="2">
+				<TextBox
+                    x:Name="QueryTextBox"
+                    FontSize="22"
+                    Text="{Binding Query}"
+                    Theme="{DynamicResource SoloTextBox}"
+                    Watermark="YouTube URL">
+					<TextBox.InnerRightContent>
+						<Button
+                            Padding="4"
+                            Command="{Binding PullMetadataCommand}"
+                            IsDefault="True"
+                            Theme="{DynamicResource MaterialFlatButton}">
+							<materialIcons:MaterialIcon
+                                Width="48"
+                                Height="48"
+                                Kind="ArrowRightCircleOutline" />
+						</Button>
+					</TextBox.InnerRightContent>
+				</TextBox>
+			</materialControls:Card>
+
+			<!--  Progress  -->
+			<ProgressBar
+                Height="1"
+                Background="Transparent"
+                IsIndeterminate="{Binding IsProgressIndeterminate}"
+                Value="{Binding Progress}" />
+
+		</StackPanel>
+
+		<!--  Video info  -->
+		<ScrollViewer
+            DockPanel.Dock="Bottom"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
+			<StackPanel>
+				<StackPanel IsVisible="{Binding !IsDataAvailable}" VerticalAlignment="Center">
+					<TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+						Margin="4"
+						FontSize="18"
+						FontWeight="SemiBold"
+						Text="Welcome to SuperSonic!"
+						TextTrimming="CharacterEllipsis" />
+					<Image Width="250" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Source="avares://supersonic/favicon.png" />
+				</StackPanel>
+				<StackPanel Orientation="Vertical" IsVisible="{Binding IsDataAvailable}">
+					<!--  Basic metadata  -->
+					<materialControls:Card Margin="8">
+						<StackPanel Orientation="Vertical">
+							<!--  Title  -->
+							<TextBlock
+								Margin="4"
+								FontSize="18"
+								FontWeight="SemiBold"
+								Text="{Binding Video.Title}"
+								TextTrimming="CharacterEllipsis" />
+
+							<Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+								<!--  Author image  -->
+								<Image
+									Grid.Row="0"
+									Grid.RowSpan="3"
+									Grid.Column="0"
+									Width="50"
+									Height="50"
+									Margin="6,6,0,6"
+									VerticalAlignment="Top"
+									asyncImageLoader:ImageLoader.Source="{Binding ChannelThumbnail.Url}"
+									DockPanel.Dock="Left" />
+
+								<!--  Author name  -->
+								<TextBlock
+									Grid.Row="0"
+									Grid.Column="1"
+									Margin="6,6,6,4"
+									VerticalAlignment="Bottom"
+									FontSize="14"
+									Text="{Binding Channel.Title}" />
+
+								<!--  Views  -->
+								<TextBlock
+									Grid.Row="0"
+									Grid.Column="2"
+									Margin="6,6,6,4"
+									HorizontalAlignment="Right"
+									FontSize="16"
+									FontWeight="SemiLight">
+									<Run Text="{Binding Video.Engagement.ViewCount, StringFormat=\{0:N0\}, Mode=OneWay}" />
+									<Run Text="views" />
+								</TextBlock>
+
+								<!--  Divider  -->
+								<Border
+									Grid.Row="1"
+									Grid.Column="1"
+									Height="2"
+									Margin="6,0,0,1"
+									HorizontalAlignment="Stretch"
+									Background="{DynamicResource MaterialDividerBrush}" />
+
+								<!--  Rating bar  -->
+								<ProgressBar
+									Grid.Row="1"
+									Grid.Column="2"
+									Height="1"
+									MinWidth="150"
+									Margin="0,0,6,0"
+									HorizontalAlignment="Stretch"
+									Maximum="5"
+									Minimum="1"
+									Value="{Binding Video.Engagement.AverageRating}" />
+
+								<!--  Upload date  -->
+								<TextBlock
+									Grid.Row="2"
+									Grid.Column="1"
+									Margin="6,4,6,6"
+									FontWeight="SemiLight"
+									Text="{Binding Video.UploadDate, StringFormat=\{0:MMM d\, yyyy\}}" />
+
+								<!--  Likes and dislikes  -->
+								<StackPanel
+									Grid.Row="2"
+									Grid.Column="2"
+									Margin="6"
+									HorizontalAlignment="Right"
+									Orientation="Horizontal">
+									<materialIcons:MaterialIcon VerticalAlignment="Center" Kind="ThumbUp" />
+									<TextBlock
+										Margin="3,0,0,0"
+										VerticalAlignment="Center"
+										FontWeight="SemiLight"
+										Text="{Binding Video.Engagement.LikeCount, StringFormat=\{0:N0\}}" />
+									<materialIcons:MaterialIcon
+										Margin="8,0,0,0"
+										VerticalAlignment="Center"
+										Kind="ThumbDown" />
+									<TextBlock
+										Margin="3,0,0,0"
+										VerticalAlignment="Center"
+										FontWeight="SemiLight"
+										Text="{Binding Video.Engagement.DislikeCount, StringFormat=\{0:N0\}}" />
+								</StackPanel>
+							</Grid>
+						</StackPanel>
+					</materialControls:Card>
+
+					<!-- Media -->
+					<Expander Margin="8,0,8,8">
+						<Expander.Header>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock
+									Margin="6,0,0,0"
+									VerticalAlignment="Center"
+									FontSize="24"
+									Text="Media " />
+								<materialIcons:MaterialIcon
+									Width="28"
+									Height="28"
+									VerticalAlignment="Center"
+									Kind="ArrowDownCircleOutline" />
+							</StackPanel>
+						</Expander.Header>
+						<StackPanel Orientation="Vertical">
+							<!--  Common  -->
+							<StackPanel Orientation="Horizontal" Margin="16,8,16,8">
+								<TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontSize="18" Text="Mixed" />
+							</StackPanel>
+							<ItemsControl Margin="16,0,6,0" ItemsSource="{Binding MuxedStreamInfos}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<!--  Download button  -->
+											<Button
+												Padding="4"
+												VerticalAlignment="Center"
+												Command="{Binding DataContext.DownloadStreamCommand, ElementName=Root}"
+												CommandParameter="{Binding}"
+												Theme="{DynamicResource MaterialFlatButton}">
+												<materialIcons:MaterialIcon
+													Width="32"
+													Height="32"
+													Kind="VideoBox" />
+											</Button>
+
+											<!--  Stream info  -->
+											<TextBlock Margin="6,0,0,0" VerticalAlignment="Center">
+												<Run Text="Quality:" />
+												<Run FontWeight="SemiBold" Text="{Binding VideoQuality.Label, Mode=OneWay}" />
+												<Run />
+												<Run Text="Type:" />
+												<Run FontWeight="SemiBold" Text="{Binding Container, Mode=OneWay}" />
+												<Run />
+												<Run Text="Size:" />
+												<Run FontWeight="SemiBold" Text="{Binding Size, Mode=OneWay}" />
+											</TextBlock>
+										</StackPanel>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+
+							<!--  Audio-only  -->
+							<StackPanel Orientation="Horizontal" Margin="16,8,16,8">
+								<TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontSize="18" Text="Audio" />
+							</StackPanel>
+							<ItemsControl Margin="16,0,6,16" ItemsSource="{Binding AudioOnlyStreamInfos}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Orientation="Horizontal">
+											<!--  Download button  -->
+											<Button
+												Padding="4"
+												VerticalAlignment="Center"
+												Command="{Binding DataContext.DownloadStreamCommand, ElementName=Root}"
+												CommandParameter="{Binding}"
+												Theme="{DynamicResource MaterialFlatButton}">
+												<materialIcons:MaterialIcon
+													Width="32"
+													Height="32"
+													Kind="Album" />
+											</Button>
+
+											<!--  Stream info  -->
+											<TextBlock Margin="6,0,0,0" VerticalAlignment="Center">
+												<Run Text="Type:" />
+												<Run FontWeight="SemiBold" Text="{Binding Container, Mode=OneWay}" />
+												<Run />
+												<Run Text="Size:" />
+												<Run FontWeight="SemiBold" Text="{Binding Size, Mode=OneWay}" />
+											</TextBlock>
+										</StackPanel>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</StackPanel>
+					</Expander>
+				</StackPanel>
+			</StackPanel>
+		</ScrollViewer>
+	</DockPanel>
+</Window>
