@@ -1,5 +1,6 @@
 # <img src="https://raw.githubusercontent.com/jetspiking/SuperSonic/main/Images/Icon.png" width="64" height="64"> SuperSonic
 <img src="https://raw.githubusercontent.com/jetspiking/SuperSonic/main/Images/Start.png" width="400">
+<img src="https://raw.githubusercontent.com/jetspiking/SuperSonic/main/Images/Showcase.png" width="400">
 
 SuperSonic YouTubeExplode Educational Implementation
 
