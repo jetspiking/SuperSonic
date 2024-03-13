@@ -2,7 +2,7 @@
 <img src="https://raw.githubusercontent.com/jetspiking/SuperSonic/main/Images/Start.png" width="400">
 <img src="https://raw.githubusercontent.com/jetspiking/SuperSonic/main/Images/Showcase.png" width="400">
 
-SuperSonic YouTubeExplode Educational Implementation
+SuperSonic is a YouTubeExplode implementation for educational purposes.
 
 # Description
 SuperSonic is an educational implementation based on [YouTubeExplode](https://github.com/Tyrrrz/YoutubeExplode). The project is based on and inspired by the corresponding example Demo.GUI project. However, some changes were made for a more minimalistic interface.
