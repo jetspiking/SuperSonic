@@ -7,7 +7,7 @@ SuperSonic is a YouTubeExplode implementation for educational purposes.
 # Description
 SuperSonic is an educational implementation based on [YouTubeExplode](https://github.com/Tyrrrz/YoutubeExplode). The project is based on and inspired by the corresponding example Demo.GUI project. However, some changes were made for a more minimalistic interface.
 
-This project provides an example implementation for you YouTubeExplode package and is published for educational purposes only.
+This project provides an example implementation for the YouTubeExplode package and is published for educational purposes only.
 
 The project also contains a configuration to demonstrate building self-contained and standalone binaries. The binaries are included for reference purposes.
 
